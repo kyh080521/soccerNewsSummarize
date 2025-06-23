@@ -3,7 +3,7 @@ import { getNewsContent } from "./articleCrawl.js";
 
 const client = new OpenAI();
 
-function howTransferPro(input) {
+const howTransferPro = (input) => {
     var playerInfo = {};
     const result = {};
 
@@ -61,7 +61,7 @@ async function isTransferNews(input) {
     ];
 
     const response = await client.responses.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1",
         input: messages
     });
 
