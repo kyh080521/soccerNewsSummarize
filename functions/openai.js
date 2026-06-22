@@ -61,7 +61,7 @@ async function isTransferNews(input) {
     ];
 
     const response = await client.responses.create({
-        model: "gpt-4.1",
+        model: "gpt-5.5",
         input: messages
     });
 
@@ -71,7 +71,7 @@ async function isTransferNews(input) {
 
 async function newsContent(input) {
     const messages = [
-        { role: "system", content: "당신의 역할을 기사를 읽고 이 선수가 현재 어떤 팀과 어느 정도로 이적설이 진행되었는지 판단하는 것입니다. 만약 선수가 어떤 팀과 링크가 나고 있지 않다면 false를 반환하십시오. 아니라면 출력값은 ','로 구분되어진 두 개의 값입니다. 첫 번째 변수는 해당 축구팀의 정식 명칭이 들어가야 합니다. 두번째 변수에는 현재 이적 상황에 따라 구단이 선수에 대한 관심 표명 단계라면 'r', 양측 간 협상이 시작되었다면 'n', 이적이 성사되었다면 'd'가 들어가야 합니다." },
+        { role: "system", content: "당신의 역할을 기사의 제목을 읽고 이 선수가 현재 어떤 팀과 어느 정도로 이적설이 진행되었는지 판단하는 것입니다. 만약 선수가 어떤 팀과 링크가 나고 있지 않다면 false를 반환하십시오. 아니라면 출력값은 ','로 구분되어진 두 개의 값입니다. 첫 번째 변수는 해당 축구팀의 정식 명칭이 들어가야 합니다. 두번째 변수에는 현재 이적 상황에 따라 구단이 선수에 대한 관심 표명 단계라면 'r', 양측 간 협상이 시작되었다면 'n', 이적이 성사되었다면 'd'가 들어가야 합니다." },
 
         { role: "user", content: "Alex, London: How much truth is there to the rumours Bukayo Saka is now unsettled at Arsenal and where do you think he will go? Madrid? City? Maybe even Newcastle? Alex Howell: I don't think there is any truth to that. Speaking about his future before the Champions League quarter-final with Real Madrid he said: I want to win and I want to win wearing this badge so I think it's pretty clear." },
         { role: "assistant", content: "false" },
@@ -86,10 +86,10 @@ async function newsContent(input) {
         { role: "assistant", content: "Arsenal , r" },
 
         { role: "user", content: input }
-    ];
+    ]
 
     const response = await client.responses.create({
-        model: "gpt-4o-mini",
+        model: "gpt-5.5",
         input: messages
     });
 
@@ -101,19 +101,21 @@ export async function newsSummarize(input) {
 
     for (const [title, url] of input) {
         const transfernews = await isTransferNews(title);
+        console.log("title : " + title + "\nisTransfernews : " + transfernews);
         if (transfernews === "true") {
-
-            const content = await getNewsContent(url);
-            const summarize = await newsContent(content);
+            //const content = await getNewsContent(url);
+            const summarize = await newsContent(title);
+            console.log("summarize: " + summarize);
 
             if (summarize !== 'false')
                 contents.push(summarize.split(","));
 
         }
+        console.log("\n\n")
     }
 
     const result = howTransferPro(contents)
-    //console.log(result)
+    console.log(result)
     return result;
 }
 

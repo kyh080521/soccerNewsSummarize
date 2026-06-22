@@ -12,6 +12,7 @@ export async function getNewsContent(articleUrl) {
             const text = $(ele).text().trim();
             content +=  text + ' ';
         })
+        console.log(content);
 
         return content
     } catch (err) {
@@ -36,6 +37,7 @@ export async function getPlayerArticles(playerName) {
             }
         });
 
+        //console.log(titles)
         return [...new Set(titles)]; // 중복 x  제거
     } catch (err) {
         console.error('Error fetching BBC Sport page:', err.message);
